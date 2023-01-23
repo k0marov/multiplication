@@ -1,0 +1,9 @@
+#multScreen {
+    display: flex; 
+    align-items: center;
+    justify-content: center;
+}
+
+#answer {
+    width: 5ch;
+}

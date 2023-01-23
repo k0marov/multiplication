@@ -1,14 +1,20 @@
+import "./MultScreen.css";
 import MultState from "../../../domain/state/MultState";
 
-export function MainScreen({state} : {state: MultState}) {
+export function MultScreen({state} : {state: MultState}) {
     return (
-        <>
-            <div>
-                <input></input>
-                <button></button>
-            </div>
-        </>
+        <div id="multScreen">
+            <section id="multSection">
+                <span>32 x 44 = </span>
+                <button>Check</button>
+                <AnswerInput />
+            </section>
+        </div>
     );
 }
 
-export default MainScreen;
+function AnswerInput() {
+    return <input id="answer"></input>;
+}
+
+export default MultScreen;
