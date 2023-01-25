@@ -6,9 +6,9 @@ export function MultScreen({state} : {state: MultState}) {
     return (
         <div id="multScreen">
             <section id="multSection">
-                <span>32 x 44 = </span>
-                <button>Check</button>
+                <span>32 x 44 =&nbsp;</span>
                 <AnswerInput />
+                <button id="submitButton">OK</button> 
             </section>
         </div>
     );

@@ -4,6 +4,18 @@
     justify-content: center;
 }
 
+#multSection {
+    display: flex; 
+    align-items: center;
+    justify-content: stretch;
+    flex-direction: row;
+}
+
 #answer {
     width: 5ch;
+}
+
+#submitButton {
+    font-size: inherit;
+    height: 100%;
 }
