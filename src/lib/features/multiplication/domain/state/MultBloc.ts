@@ -6,7 +6,7 @@ import { MultState } from "./MultState";
 export class MultBloc extends Bloc<MultState> {
     constructor(private readonly service: NumbersService) {
         super(null);
-        this.loadNextTask();
+        this.restart();
     }
 
     changeAnswer = (newAnswer: string) => {
@@ -27,25 +27,22 @@ export class MultBloc extends Bloc<MultState> {
         if (current == null) return; 
         if (current.answer === current.task.correctAnswer) {
             console.log("Correct!"); 
+            this.loadNextTask(current.score + 1);
         } else {
             console.log("Incorrect!");
+            this.loadNextTask(current.score);
         }
-        this.loadNextTask();
     }
 
-    resetScore = async () => {
-        this.emit({
-            score: 0, 
-            task: await this.service.generateTask(), 
-            answer: null,            
-        })
+    restart = async () => {
+        this.loadNextTask(0);
     }
 
-    private loadNextTask = async () => {
+    private loadNextTask = async (score: number) => {
         const task = await this.service.generateTask();
         this.emit({
-            score: 0,
-            ...this.state,  // overrides score if it is defined
+            ...this.state,  
+            score: score,
             task: task, 
             answer: null,
         })
