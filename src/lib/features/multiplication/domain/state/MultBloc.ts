@@ -12,8 +12,8 @@ export class MultBloc extends Bloc<MultState> {
     changeAnswer = (newAnswer: string) => {
         const current = this.state; 
         if (current == null) return; 
-        const parsed = newAnswer === "" ? null : Number.parseInt(newAnswer);
-        if (Number.isNaN(parsed) || (parsed ?? 0) > this.service.getMaxResult()) return; 
+        const parsed = this.service.parseAnswer(newAnswer);
+        if (Number.isNaN(parsed)) return; 
         this.emit({
             ...current, 
             answer: parsed,
@@ -29,7 +29,7 @@ export class MultBloc extends Bloc<MultState> {
         );
     }
 
-    getMaxScore = () => this.service.getMaxScore();
+    getMaxScore = () => this.service.maxScore;
     restart = () => this.loadNextTask(AnswerStatus.unset); 
 
     private loadNextTask = async (answerResult: AnswerStatus) => {
