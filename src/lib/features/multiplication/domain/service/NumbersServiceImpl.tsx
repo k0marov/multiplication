@@ -14,6 +14,7 @@ class NumbersServiceImpl implements NumbersService {
         };
     }
     getMaxResult = () => 9999;
+    getMaxScore = () => 10; 
 }
 
 export default NumbersServiceImpl;

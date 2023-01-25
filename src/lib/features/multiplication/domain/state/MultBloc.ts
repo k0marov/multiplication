@@ -23,18 +23,16 @@ export class MultBloc extends Bloc<MultState> {
     submitAnswer = () => {
         const current = this.state; 
         if (current == null) return; 
-        console.log(current.answer); 
-        console.log(current.task.correctAnswer);
         if (current.answer === current.task.correctAnswer) {
-            this.loadNextTask(current.score + 1);
+            const newScore = current.score + 1; 
+            this.loadNextTask(newScore > this.service.getMaxScore() ? 0 : newScore);
         } else {
             this.loadNextTask(current.score);
         }
     }
 
-    restart = async () => {
-        this.loadNextTask(0);
-    }
+    getMaxScore = () => this.service.getMaxScore();
+    restart = () => this.loadNextTask(0); 
 
     private loadNextTask = async (score: number) => {
         const task = await this.service.generateTask();
