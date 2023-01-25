@@ -1,8 +1,8 @@
 import "./MultScreen.css";
-import MultState from "../../../domain/state/MultState";
+import LoadedState from "../../../domain/state/MultState";
 import { useState } from "react";
 
-export function MultScreen({state} : {state: MultState}) {
+export function MultScreen({state} : {state: LoadedState}) {
     return (
         <div id="multScreen">
             <section id="multSection">
