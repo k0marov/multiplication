@@ -1,4 +1,3 @@
-import { createJSDocProtectedTag } from "typescript";
 import { Bloc } from "../../../../core/utils/bloc/Bloc";
 import BlocComponentsFactory from "../../../../core/utils/bloc/BlocComponentsFactory";
 import NumbersService from "../service/NumbersService";
@@ -34,10 +33,19 @@ export class MultBloc extends Bloc<MultState> {
         this.loadNextTask();
     }
 
+    resetScore = async () => {
+        this.emit({
+            score: 0, 
+            task: await this.service.generateTask(), 
+            answer: null,            
+        })
+    }
+
     private loadNextTask = async () => {
         const task = await this.service.generateTask();
         this.emit({
-            ...this.state, 
+            score: 0,
+            ...this.state,  // overrides score if it is defined
             task: task, 
             answer: null,
         })
