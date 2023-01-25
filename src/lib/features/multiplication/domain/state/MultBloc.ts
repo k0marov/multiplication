@@ -1,3 +1,4 @@
+import { createJSDocProtectedTag } from "typescript";
 import { Bloc } from "../../../../core/utils/bloc/Bloc";
 import BlocComponentsFactory from "../../../../core/utils/bloc/BlocComponentsFactory";
 import NumbersService from "../service/NumbersService";
@@ -12,16 +13,20 @@ export class MultBloc extends Bloc<MultState> {
     changeAnswer = (newAnswer: string) => {
         const current = this.state; 
         if (current == null) return; 
-        this.emit({
-            ...current, 
-            answer: newAnswer,
-        })
+        try {
+            this.emit({
+                ...current, 
+                answer: newAnswer === "" ? null : Number.parseInt(newAnswer),
+            });
+        } catch (e) {
+            // Ignore the parsing error, thus not updating the answer text field 
+        }
     }
 
     submitAnswer = () => {
         const current = this.state; 
         if (current == null) return; 
-        if (Number.parseInt(current.answer) === current.task.correctAnswer) {
+        if (current.answer === current.task.correctAnswer) {
             console.log("Correct!"); 
         } else {
             console.log("Incorrect!");
@@ -34,7 +39,7 @@ export class MultBloc extends Bloc<MultState> {
         this.emit({
             ...this.state, 
             task: task, 
-            answer: "",
+            answer: null,
         })
     }
 

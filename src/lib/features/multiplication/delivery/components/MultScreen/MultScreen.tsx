@@ -1,31 +1,21 @@
 import "./MultScreen.css";
 import LoadedState from "../../../domain/state/MultState";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { MultContext } from "../../../domain/state/MultBloc";
 
 export function MultScreen({state} : {state: LoadedState}) {
+    const bloc = useContext(MultContext)!;
     return (
         <div id="multScreen">
             <section id="multSection">
-                <span>32 x 44 =&nbsp;</span>
-                <AnswerInput />
+                <span>{state.task.firstNumber} x {state.task.secondNumber} =&nbsp;</span>
+                <input 
+                    value={(state.answer ?? "").toString()} 
+                    onChange={(event) => bloc.changeAnswer(event.target.value)}
+                />
                 <button id="submitButton">OK</button> 
             </section>
         </div>
     );
 }
-
-function AnswerInput() {
-    const [text, setText] = useState("");
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setText(event.target.value.replace(/[^0-9]/g, '')) 
-    };
-    return (
-        <input 
-            id="answer"
-            value={text} 
-            onChange={handleChange}
-        />
-    );
-}
-
 export default MultScreen;
