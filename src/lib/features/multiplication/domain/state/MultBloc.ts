@@ -1,7 +1,7 @@
 import { Bloc } from "../../../../core/utils/bloc/Bloc";
 import BlocComponentsFactory from "../../../../core/utils/bloc/BlocComponentsFactory";
 import NumbersService from "../service/NumbersService";
-import { MultState } from "./MultState";
+import { AnswerStatus, MultState } from "./MultState";
 
 export class MultBloc extends Bloc<MultState> {
     constructor(private readonly service: NumbersService) {
@@ -23,25 +23,29 @@ export class MultBloc extends Bloc<MultState> {
     submitAnswer = () => {
         const current = this.state; 
         if (current == null) return; 
-        if (current.answer === current.task.correctAnswer) {
-            const newScore = current.score + 1; 
-            this.loadNextTask(newScore > this.service.getMaxScore() ? 0 : newScore);
-        } else {
-            this.loadNextTask(current.score);
-        }
+        this.loadNextTask(current.answer === current.task.correctAnswer ? 
+              AnswerStatus.successful 
+            : AnswerStatus.wrong
+        );
     }
 
     getMaxScore = () => this.service.getMaxScore();
-    restart = () => this.loadNextTask(0); 
+    restart = () => this.loadNextTask(AnswerStatus.unset); 
 
-    private loadNextTask = async (score: number) => {
+    private loadNextTask = async (answerResult: AnswerStatus) => {
         const task = await this.service.generateTask();
         this.emit({
             ...this.state,  
-            score: score,
+            score: this.computeNewScore(answerResult),
             task: task, 
+            previousAnswer: answerResult,
             answer: null,
         })
+    }
+
+    private computeNewScore = (ans: AnswerStatus) => {
+        const currentScore = this.state?.score ?? 0; 
+        return ans === AnswerStatus.successful ? currentScore + 1 : currentScore;
     }
 
 }
