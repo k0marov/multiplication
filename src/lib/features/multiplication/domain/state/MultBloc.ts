@@ -12,24 +12,22 @@ export class MultBloc extends Bloc<MultState> {
     changeAnswer = (newAnswer: string) => {
         const current = this.state; 
         if (current == null) return; 
-        try {
-            this.emit({
-                ...current, 
-                answer: newAnswer === "" ? null : Number.parseInt(newAnswer),
-            });
-        } catch (e) {
-            // Ignore the parsing error, thus not updating the answer text field 
-        }
+        const parsed = newAnswer === "" ? null : Number.parseInt(newAnswer);
+        if (Number.isNaN(parsed) || (parsed ?? 0) > this.service.getMaxResult()) return; 
+        this.emit({
+            ...current, 
+            answer: parsed,
+        });
     }
 
     submitAnswer = () => {
         const current = this.state; 
         if (current == null) return; 
+        console.log(current.answer); 
+        console.log(current.task.correctAnswer);
         if (current.answer === current.task.correctAnswer) {
-            console.log("Correct!"); 
             this.loadNextTask(current.score + 1);
         } else {
-            console.log("Incorrect!");
             this.loadNextTask(current.score);
         }
     }

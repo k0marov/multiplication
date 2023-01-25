@@ -6,6 +6,7 @@ export interface MultTask {
 
 interface NumbersService {
     generateTask() : Promise<MultTask>;
+    getMaxResult() : number;
 };
 
 export default NumbersService;

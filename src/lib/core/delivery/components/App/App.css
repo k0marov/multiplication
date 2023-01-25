@@ -1,7 +1,9 @@
 body, input {
+    font-family: monospace;
     font-size: 52px;
 }
 section {
     padding: 16px;
+    border-radius: 25px;
     background-color: rgb(211, 211, 211);
 }

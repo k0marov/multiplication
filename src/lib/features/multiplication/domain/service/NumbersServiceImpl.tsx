@@ -13,6 +13,7 @@ class NumbersServiceImpl implements NumbersService {
             correctAnswer: first*second, 
         };
     }
+    getMaxResult = () => 9999;
 }
 
 export default NumbersServiceImpl;
