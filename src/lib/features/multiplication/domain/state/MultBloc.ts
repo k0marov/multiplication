@@ -3,14 +3,14 @@ import BlocComponentsFactory from "../../../../core/utils/bloc/BlocComponentsFac
 import NumbersService, { AnswerStatus } from "../service/NumbersService";
 import { MultState } from "./MultState";
 
-const WRONG_ANSWER_DELAY_DURATION = 3000;
-const CORRECT_ANSWER_DELAY_DURATION = 1000;
-
 export class MultBloc extends Bloc<MultState> {
     constructor(private readonly service: NumbersService) {
         super(null);
         this.restart();
     }
+    get wrongAnswerDelaySec() { return 3; }
+    get correctAnswerDelaySec() { return  1; } 
+
 
     changeAnswer = (newAnswer: string) => {
         const current = this.state; 
@@ -32,8 +32,10 @@ export class MultBloc extends Bloc<MultState> {
             score: this.computeNewScore(answerStatus),
             answerStatus: answerStatus,
         });
-        const delay = answerStatus === AnswerStatus.correct ? CORRECT_ANSWER_DELAY_DURATION : WRONG_ANSWER_DELAY_DURATION;
-        setTimeout(() => this.loadNextTask(), delay);
+        const delay = answerStatus === AnswerStatus.correct ? 
+              this.correctAnswerDelaySec 
+            : this.wrongAnswerDelaySec;
+        setTimeout(() => this.loadNextTask(), delay*1000);
     }
 
     getMaxScore = () => this.service.maxScore;

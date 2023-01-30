@@ -11,11 +11,20 @@ export interface MultScreenProps {
 
 export function MultScreen({state} : MultScreenProps) {
     const bloc = useContext(MultContext)!;
+
+    const delayVars = {
+        ['--correct-delay' as any]: `${bloc.correctAnswerDelaySec}s`,
+        ['--wrong-delay' as any]: `${bloc.wrongAnswerDelaySec}s`,
+    };
+
+    const scoreClassName = state.answerStatus === AnswerStatus.correct ? "incrementedScore" : "";
+    const score = <span className={scoreClassName}>{state.score}</span>;
+
     return (
-        <div id="multScreen">
+        <div id="multScreen" style={delayVars}>
             <section id="multSection">
                 <MultGameForm state={state} />
-                <span>{state.score}/{bloc.getMaxScore()}</span>
+                <span>{score}/{bloc.getMaxScore()}</span>
             </section>
         </div>
     );
