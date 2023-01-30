@@ -37,23 +37,24 @@ function MultGameForm({state}: MultScreenProps) {
         e.preventDefault();
         bloc.submitAnswer();
     }
-    const submitClassName = getSubmitClassName(state.answerStatus);
+    const formClassName = getFormClassName(state.answerStatus);
     return (
-        <form onSubmit={handleSubmit}>
-            <span>{state.task.firstNumber} x {state.task.secondNumber} =&nbsp;</span>
+        <form className={formClassName} onSubmit={handleSubmit}>
+            <span>{state.task.firstNumber} &times; {state.task.secondNumber} =&nbsp;</span>
             <input 
                 id="answer"
-                value={answer} 
+                disabled={state.answerStatus === AnswerStatus.wrong}
+                value={state.answerStatus === AnswerStatus.wrong ? state.task.correctAnswer : answer} 
                 onChange={(event) => bloc.changeAnswer(event.target.value)}
             />
-            <button type='submit' className={submitClassName} id="submitButton">
+            <button type='submit' id="submitButton">
                 OK
             </button> 
         </form>
     );
 }
 
-function getSubmitClassName(answer: AnswerStatus | null) {
+function getFormClassName(answer: AnswerStatus | null) {
     switch (answer) {
         case AnswerStatus.correct: return "correct"; 
         case AnswerStatus.wrong: return "wrong"; 
