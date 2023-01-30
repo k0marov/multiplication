@@ -3,6 +3,7 @@ import LoadedState from "../../../domain/state/MultState";
 import { FormEvent, useContext } from "react";
 import { MultContext } from "../../../domain/state/MultBloc";
 import { blob } from "node:stream/consumers";
+import { AnswerStatus } from "../../../domain/service/NumbersService";
 
 export interface MultScreenProps {
     state: LoadedState,
@@ -27,6 +28,7 @@ function MultGameForm({state}: MultScreenProps) {
         e.preventDefault();
         bloc.submitAnswer();
     }
+    const submitClassName = getSubmitClassName(state.answerStatus);
     return (
         <form onSubmit={handleSubmit}>
             <span>{state.task.firstNumber} x {state.task.secondNumber} =&nbsp;</span>
@@ -35,11 +37,19 @@ function MultGameForm({state}: MultScreenProps) {
                 value={answer} 
                 onChange={(event) => bloc.changeAnswer(event.target.value)}
             />
-            <button type='submit' id="submitButton">
+            <button type='submit' className={submitClassName} id="submitButton">
                 OK
             </button> 
         </form>
     );
+}
+
+function getSubmitClassName(answer: AnswerStatus | null) {
+    switch (answer) {
+        case AnswerStatus.correct: return "correct"; 
+        case AnswerStatus.wrong: return "wrong"; 
+        case null: return "";
+    }
 }
 
 export default MultScreen;

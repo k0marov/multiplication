@@ -1,4 +1,4 @@
-import NumbersService, { MultTask } from "./NumbersService";
+import NumbersService, { AnswerStatus, MultTask } from "./NumbersService";
 
 class NumbersServiceImpl implements NumbersService {
     get maxScore() { return 10; };
@@ -24,6 +24,9 @@ class NumbersServiceImpl implements NumbersService {
         return parsed;
     };
     
+    checkAnswer = (answer: number, task: MultTask): AnswerStatus => {
+        return answer === task.correctAnswer ? AnswerStatus.correct : AnswerStatus.wrong; 
+    }
 }
 
 export default NumbersServiceImpl;
